@@ -1,0 +1,84 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "reflectable_flutter_analyzer",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "reflectable_flutter_analyzer (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "reflectable_flutter_analyzer (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "design_system_lints",
+            "cwd": "packages/design_system_lints",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "design_system_lints (profile mode)",
+            "cwd": "packages/design_system_lints",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "design_system_lints (release mode)",
+            "cwd": "packages/design_system_lints",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "reflectable_analyzer",
+            "cwd": "packages/reflectable_analyzer",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "example",
+            "cwd": "packages/design_system_lints/example",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "example (profile mode)",
+            "cwd": "packages/design_system_lints/example",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "example (release mode)",
+            "cwd": "packages/design_system_lints/example",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "example (debug mode)",
+            "program": "lib/example.dart",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "toolArgs": [
+                "show-test-device"
+            ],
+            "args": [
+                "show-test-device"
+            ]
+        }
+    ]
+}
