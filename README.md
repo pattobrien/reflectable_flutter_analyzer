@@ -4,10 +4,10 @@ This is a proof-of-concept application for analyzing files using types defined i
 ## Motivation
 
 The suite of Dart analyzer tools rely solely on the Dart SDK. 
-When writing custom rules for Flutter-based projects (via tools like ```Sidecar``` and ```analyzer_plugin```),
+When writing custom rules for Flutter-based projects (via tools like ```package:sidecar``` and ```package:analyzer_plugin```),
 we cannot directly import Flutter-based packages, as our analyzer does not have awareness of such packages from the Flutter SDK.
 
-Therefore, we're limitted to using more-complex and more-fragile APIs, such as the following:
+Therefore, we're limitted to using more-complex and more-fragile utilities for working with these packages, such as the following:
 
 
 ```dart
@@ -42,7 +42,7 @@ class _Flutter {
 
 ```dart
 
-// "use_colored_box" Lint rule definition that uses the above APIs
+// "use_colored_box" Lint rule definition that uses the above utility APIs
 
 class _Visitor extends SimpleAstVisitor {
   ...
@@ -89,15 +89,16 @@ class _ArgumentData {
 
 Note the following issues with the above APIs:
 
-- All third-party packages (Riverpod, Bloc, etc) would have to implement similar APIs, either via automation tools or by hand
-- No version control; what would happen if these strings or URIs were to change in a future package version? Packages need to be very carefully monitored for "breaking" changes.
-  - additionally, "breaking" changes could be as simple as renaming a file of a particular Type. Regardless of if users are restricted to using ```package:riverpod/riverpod.dart``` for a ```Provider``` type, if the source URI of ```Provider``` was to change from ```package:riverpod/src/framework/providers.dart```, this would be enough for the analyzer to break
+Package Developers (e.g. Flutter, Riverpod, etc.)
+- These utilities are ```package:flutter``` specific; third-party packages (Riverpod, Bloc, etc) would have to implement and maintain similar APIs, either via tooling or by hand
+- String-based utilities are not type safe; packages need to be very carefully monitored for "breaking" changes
+  - additionally, "breaking" changes in this case could be as subtle as renaming a file of a particular Type. For example, even if users import ```package:riverpod/riverpod.dart``` to use the type ```Provider```, if the source URI of ```Provider``` was to change from ```package:riverpod/src/framework/providers.dart``` to a different source path, this would be enough for the above utilities to break
 
-Rule Creators:
-- They must learn a whole new suite of non-intuitive utilities and APIs, which will likely not be standardized from package to package.
-- Creators would not be able to import Flutter-based packages directly
+Rule Developers:
+- Rule developers must learn a whole new series of non-intuitive utilities such as ```isExactWidgetTypeContainer```, which will likely be non-standardized / have different naming schemes from package to package
+- Rule Developers would (unintuitively) not be able to import Flutter-based packages directly, and instead would have to import these Flutter-utility packages instead
 
-### Objective
+## Objective
 
 Imagine an even simpler API, that does not require Package authors to create a suite of utilities like ```isWidgetType``` and allows developers to more intuitively work with Types and Objects defined in Ecosystem Packages:
 
@@ -115,7 +116,7 @@ class _Visitor extends SimpleAstVisitor {
   @override
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     
-    if (node.staticType != reflectedType(Container)) return;
+    if (!node.staticType.isType<Color>()) return;
 
     final container = Mirror<Container>.fromNode(node);
     
@@ -129,10 +130,10 @@ class _Visitor extends SimpleAstVisitor {
 In the above example, we would make a number of improvements:
 
 - A generated utility file allows:
-  - Utilities to be generated on-the-fly when imported into a project; so whether you're importing Flutter v2.0 or v3.0, the files will generate based on the source URIs for the current version
-  - 0 maintenance from individual Ecosystem Package authors (i.e. Riverpod would not need to create any Analyzer utilities)
-- Developers would be able to use a fixed amount of reflection classes like ```reflectedType```; that knowledge would be transferable between any package (Riverpod, BLoC, etc.)
-- Rule developers could use APIs that are familiar and type safe
+  - Utilities to be generated on-the-fly when imported into a project; so whether you're importing Flutter v2.0 or v3.0, the files will generate based on the source URIs for the correct version
+  - 0 maintenance from individual Ecosystem Package authors (i.e. ```package:riverpod``` would not need to create any Analyzer utilities)
+- Developers would be able to use a fixed amount of reflection classes like ```isType<Color>```; that knowledge would be transferable between any package (e.g. ```isType<Provider>``` for ```package:riverpod```, ```isType<BlocBase>``` for ```package:bloc```, etc.)
+- Rule developers could import packages like flutter and riverpod, and use APIs that are familiar and type safe
 
 ```dart
 // new API
@@ -152,6 +153,8 @@ if (label.name == 'color' &&
 }
 
 ```
+
+### Individual Goals
 
 This application will be used to test out ways we can reach the above goals. Those goals include the following tasks:
 
