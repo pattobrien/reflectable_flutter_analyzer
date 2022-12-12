@@ -15,21 +15,22 @@ import 'package:reflectable/reflectable.dart';
 import 'package:reflectable_analyzer/src/type_checkers.dart';
 import 'package:yaml/yaml.dart';
 
+// extension ExpressionX on Expression {
+//   bool isType<T>(Reflectable reflector) {
+//     return staticType.isType(reflector);
+//   }
+// }
+
 extension DartTypeX on DartType? {
-  bool isType<T>(Reflectable reflector) {
-    if (this == null) {
-      // print('check $type: null');
-    }
-    if (!reflector.canReflectType(T)) {
-      // print('check $type: UnimplementedError');
+  bool isType(Type type, Reflectable reflector) {
+    if (this == null) return false;
+
+    if (!reflector.canReflectType(type)) {
       throw UnimplementedError();
     }
 
-    final typeChecker = TypeChecker.fromRuntime(T, reflector);
-    final isAssignable = typeChecker.isAssignableFromType(this!);
-
-    // print('check $type: $isAssignable');
-    return isAssignable;
+    final typeChecker = TypeChecker.fromRuntime(type, reflector);
+    return typeChecker.isAssignableFromType(this!);
   }
 }
 

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:reflectable_analyzer/reflectable_analyzer.dart';
 
 @GlobalQuantifyCapability(r'\.Color$', analyzerReflector)
+@GlobalQuantifyCapability(r'\.Container$', analyzerReflector)
 import 'package:reflectable/reflectable.dart' hide SourceLocation;
 
 import 'reflector.reflectable.dart';
@@ -12,8 +13,7 @@ import 'reflector.reflectable.dart';
 void main() {
   initializeReflectable();
   // reflect Color type
-  final colorType = Color;
-  final typeChecker = TypeChecker.fromRuntime(colorType, analyzerReflector);
+  final typeChecker = TypeChecker.fromRuntime(Color, analyzerReflector);
   // reflect Color instance
   final color = Color(0xFFFFFF00);
   final instance = analyzerReflector.reflect(color);
