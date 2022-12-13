@@ -16,7 +16,7 @@ dependencies:
   source_gen: ^1.2.6
   build: ^2.3.1
   yaml: ^3.1.1
-  source_span: ^1.9.1
+  source_span: ^1.8.2
   reflectable_analyzer:
     path: ../reflectable_analyzer/
 

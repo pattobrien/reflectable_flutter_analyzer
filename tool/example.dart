@@ -7,6 +7,8 @@ import 'package:design_system_lints/design_system_lints.dart';
 
 import 'reflector.reflectable.dart';
 
+// run via: flutter run tool/example.dart --show-test-device
+
 void main() async {
   initializeReflectable();
   final file = Directory.current.uri.resolve(p.join('assets', 'colors.dart'));
